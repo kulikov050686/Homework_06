@@ -44,8 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\FileInput.cs" />
-    <Compile Include="Controller\KeyboardInput.cs" />
+    <Compile Include="Controller\InputData.cs" />
     <Compile Include="Controller\MyBaseClass.cs" />
     <Compile Include="Model\OpenSaveFile.cs" />
     <Compile Include="MyLibraryMenu\Menu.cs" />

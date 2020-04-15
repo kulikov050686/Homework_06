@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 
 namespace Homework_06.Controller
 {
@@ -9,7 +10,7 @@ namespace Homework_06.Controller
         /// <summary>
         /// Максимальное вводимое число
         /// </summary>
-        protected const uint maxNumber = 1_000_000_000;
+        protected const uint maxNumber = 10_000_000;
 
         /// <summary>
         /// Вводимое число
@@ -145,7 +146,8 @@ namespace Homework_06.Controller
 
         /// <summary>
         /// Сохранение групп чисел в текстовый файл
-        /// </summary>        
+        /// </summary>
+        /// <param name="path"> Путь к файлу </param>        
         protected bool SaveGroupsToFile(string path)
         {
             if(NumberOfGroups > 0)
@@ -185,6 +187,35 @@ namespace Homework_06.Controller
                     Console.WriteLine("Имя файла не может быть пустым!!!");
                 }
             }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Архивация данных
+        /// </summary>
+        /// <param name="path"> Путь к файлу </param>
+        /// <param name="compressedFile"> Путь к сжатому файлу </param>
+        protected bool DataArchiving(string path, string compressedFile)
+        {
+            if(path != null && compressedFile != null)
+            {
+                // поток для чтения исходного файла
+                using (FileStream sourceStream = new FileStream(path, FileMode.OpenOrCreate))
+                {
+                    // поток для записи сжатого файла
+                    using (FileStream targetStream = File.Create(compressedFile))
+                    {
+                        // поток архивации
+                        using (GZipStream compressionStream = new GZipStream(targetStream, CompressionMode.Compress))
+                        {
+                            sourceStream.CopyTo(compressionStream);                           
+                        }
+                    }
+                }
+
+                return true;
+            }           
 
             return false;
         }

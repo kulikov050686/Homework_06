@@ -49,5 +49,26 @@ namespace Homework_06.Model
 
             return false;
         }
+
+        /// <summary>
+        /// Открывает диалоговое окно для архивации файла
+        /// </summary>        
+        static public bool ArchiveFile()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.Title = "Архивировать файл";
+            saveFileDialog.Filter = "txt files (*.txt)|*.txt";
+            saveFileDialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            saveFileDialog.OverwritePrompt = false;
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Path = saveFileDialog.FileName;
+                return true;
+            }
+
+            return false;
+        }
     }
 }

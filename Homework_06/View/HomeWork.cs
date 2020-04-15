@@ -9,22 +9,32 @@ namespace Homework_06.View
         /// <summary>
         /// Завершение программы
         /// </summary>
-        bool Exit = false;
+        bool Exit;
         
         /// <summary>
         /// Номер пункта меню
         /// </summary>
-        int Item = 0;
+        int Item;
 
         /// <summary>
-        /// Ввод числа с клавиатуры
+        /// Выбор пункта меню
         /// </summary>
-        KeyboardInput keyboardInput;
+        string[] Selection;
 
         /// <summary>
-        /// Ввод числа из файла
+        /// Ввод данных
         /// </summary>
-        FileInput fileInput;
+        InputData inputData;
+
+        /// <summary>
+        /// Конструктор по умолчанию
+        /// </summary>
+        public HomeWork()
+        {
+            Exit = false;
+            Item = 0;
+            Selection = new string[] { "Да", "Нет"};
+        }
 
         /// <summary>
         /// Запуск программы
@@ -39,12 +49,14 @@ namespace Homework_06.View
                 {
                     Console.Clear();
                     KeyboardInputData();
+                    WorkWithData();
                 }
 
                 if(Item == 1)
                 {
                     Console.Clear();
                     FileInputData();
+                    WorkWithData();
                 }
             }
         }
@@ -54,46 +66,10 @@ namespace Homework_06.View
         /// </summary>
         private void KeyboardInputData()
         {
-            keyboardInput = new KeyboardInput();
-            keyboardInput.InputNumber();
-            char Enter = 'N';
+            inputData = new InputData();
+            inputData.InputNumberKeyboard();
 
-            Console.WriteLine("Количество групп чисел: " + keyboardInput.NumberGroups);
-            Console.WriteLine("ВНИМАНИЕ: Расчёт групп может занять очень много времени!!!");
-            Console.WriteLine("Расчитать эти группы (Y / N): ");
-            
-            if(char.TryParse(Console.ReadLine(), out Enter))
-            {
-                if (Enter == 'Y' || Enter == 'y')
-                {
-                    keyboardInput.Run();
-
-                    Console.WriteLine("Сохранить данные в файл (Y / N): ");
-
-                    if (char.TryParse(Console.ReadLine(), out Enter))
-                    {
-                        if (Enter == 'Y' || Enter == 'y')
-                        {
-                            keyboardInput.SaveToFile();
-                            Console.ReadKey();
-                            return;
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    return;
-                }
-            }
-
-            Console.WriteLine("Некоректно введённые данные!!!");
-
-            
-
+            Console.WriteLine("Количество групп чисел: " + inputData.NumberGroups);
             Console.ReadKey();
         }
 
@@ -102,44 +78,10 @@ namespace Homework_06.View
         /// </summary>
         private void FileInputData()
         {
-            fileInput = new FileInput();
-            fileInput.InputNumber();
-            char Enter = 'N';
+            inputData = new InputData();
+            inputData.InputNumberFile();
 
-            Console.WriteLine("Количество групп чисел: " + fileInput.NumberGroups);
-            Console.WriteLine("ВНИМАНИЕ: Расчёт групп может занять очень много времени!!!");
-            Console.WriteLine("Расчитать эти группы (Y / N): ");
-
-            if (char.TryParse(Console.ReadLine(), out Enter))
-            {
-                if (Enter == 'Y' || Enter == 'y')
-                {
-                    fileInput.Run();
-
-                    Console.WriteLine("Сохранить данные в файл (Y / N): ");
-
-                    if (char.TryParse(Console.ReadLine(), out Enter))
-                    {
-                        if (Enter == 'Y' || Enter == 'y')
-                        {
-                            fileInput.SaveToFile();
-                            Console.ReadKey();
-                            return;
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    return;
-                }
-            }
-
-            Console.WriteLine("Некоректно введённые данные!!!");
-
+            Console.WriteLine("Количество групп чисел: " + inputData.NumberGroups);
             Console.ReadKey();
         }
 
@@ -152,7 +94,7 @@ namespace Homework_06.View
                                                 "Из файла",                                                
                                                 "Выход" };
 
-            NewMenu menu = new NewMenu(itensMenu, "Выбирите ввод двнных");
+            NewMenu menu = new NewMenu(itensMenu, "Выбирите ввод данных");
 
             switch (menu.selectedMenuItem())
             {
@@ -167,7 +109,81 @@ namespace Homework_06.View
                     Exit = true;
                     break;
             }
-        }        
+        }
+
+        /// <summary>
+        /// Меню выбора
+        /// </summary>
+        /// <param name="text"> Текст заголовка </param>
+        private bool SelectionMenu(string text)
+        {
+            NewMenu menu = new NewMenu(Selection, text);
+
+            if (menu.selectedMenuItem() == 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Расчёт количества групп чисел
+        /// </summary>
+        private void Сalculation() 
+        {
+            DateTime date = DateTime.Now;
+
+            inputData.Run();
+
+            TimeSpan timeSpan = DateTime.Now.Subtract(date);
+
+            Console.WriteLine($"Время рачёта групп чисел составило (мс): {timeSpan.TotalSeconds: 0.000}");
+
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Сохранить группы чисел в файле
+        /// </summary>
+        private void WriteToFile()
+        {
+            inputData.SaveToFile();
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Сжатие данных
+        /// </summary>
+        private void Compression()
+        {
+            inputData.Compression();
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Работа с данными
+        /// </summary>
+        private void WorkWithData()
+        {
+            if (SelectionMenu("Расчитать группы чисел?"))
+            {
+                Console.Clear();
+                Сalculation();
+
+                if (SelectionMenu("Сохранить данные в файл?"))
+                {
+                    Console.Clear();
+                    WriteToFile();
+                }
+
+                if(SelectionMenu("Архивировать данные?"))
+                {
+                    Console.Clear();
+                    Compression();
+                }
+            }
+        }
     }
 }
 
