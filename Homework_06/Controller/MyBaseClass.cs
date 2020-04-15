@@ -152,22 +152,32 @@ namespace Homework_06.Controller
             {
                 if(path != null)
                 {
-                    string[] line = new string[NumberOfGroups];
-                    
-                    for(int i = 0; i < NumberOfGroups; i++)
-                    {
-                        line[i] = $"ГРУППА {i + 1}:  ";
+                    bool append = false;
+                    string line;
 
-                        foreach(uint temp in Groups[i])
+                    for (int i = 0; i < NumberOfGroups; i++)
+                    {
+                        line = $"ГРУППА {i + 1}:  ";
+
+                        if (i != 0)
                         {
-                            line[i] += Convert.ToString(temp) + " ";
+                            append = true;
                         }
 
-                        line[i] += "\n";
+                        using (StreamWriter streamWriter = new StreamWriter(path, append))
+                        {
+                            streamWriter.Write(line);
+
+                            foreach (uint temp in Groups[i])
+                            {
+                                line = Convert.ToString(temp) + " ";
+                                streamWriter.Write(line);
+                            }
+
+                            streamWriter.Write("\n");
+                        }
                     }
-
-                    File.WriteAllLines(path, line);
-
+                    
                     return true;
                 }
                 else

@@ -48,6 +48,9 @@
     <Compile Include="Controller\KeyboardInput.cs" />
     <Compile Include="Controller\MyBaseClass.cs" />
     <Compile Include="Model\OpenSaveFile.cs" />
+    <Compile Include="MyLibraryMenu\Menu.cs" />
+    <Compile Include="MyLibraryMenu\MenuController.cs" />
+    <Compile Include="MyLibraryMenu\NewMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\HomeWork.cs" />
